@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Life Simulator Multiplayer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #dce35b 0%, #45b649 100%);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    color: #333;
+  }
+  .container {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    padding: 30px 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #2e8b57;
+  }
+  #profile-setup {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  #profile-setup input, #profile-setup select {
+    width: 40%;
+    min-width: 200px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1rem;
+    margin: 8px;
+    transition: 0.3s;
+  }
+  #startBtn {
+    background: #2e8b57;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  #startBtn:hover {
+    background: #256d46;
+  }
+  #dashboard {
+    display: none;
+  }
+  .player-section {
+    background: #f9f9f9;
+    border-radius: 15px;
+    padding: 20px 30px;
+    margin-bottom: 25px;
+    border-left: 6px solid #2e8b57;
+  }
+  .player-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #2e8b57;
+  }
+  .age {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  .stat {
+    margin-bottom: 12px;
+  }
+  .stat label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #333;
+  }
+  .progress-bar {
+    background: #ddd;
+    border-radius: 10px;
+    height: 16px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0;
+    background: #2e8b57;
+    transition: width 0.5s ease-in-out;
+  }
+  .actions {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .actions button {
+    background: #2e8b57;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 6px 8px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .actions button:hover:not(:disabled) {
+    background: #256d46;
+  }
+  #eventMsg, #milestoneMsg, #relationshipStatus {
+    margin-top: 15px;
+    min-height: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2e8b57;
+    text-align: center;
+  }
+  #turnIndicator {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2e8b57;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Life Simulator Multiplayer</h1>
+    <div id="profile-setup">
+      <input type="text" id="nameInput1" placeholder="Player 1 name" />
+      <select id="schoolInput1">
+        <option value="">Choose School</option>
+        <option>Public School</option>
+        <option>Private School</option>
+        <option>Homeschool</option>
+      </select>
+      <select id="jobInput1">
+        <option value="">Choose Job</option>
+        <option>Engineer</option>
+        <option>Doctor</option>
+        <option>Artist</option>
+        <option>Unemployed</option>
+      </select>
+      <br />
+      <input type="text" id="nameInput2" placeholder="Player 2 name" />
+      <select id="schoolInput2">
+        <option value="">Choose School</option>
+        <option>Public School</option>
+        <option>Private School</option>
+        <option>Homeschool</option>
+      </select>
+      <select id="jobInput2">
+        <option value="">Choose Job</option>
+        <option>Engineer</option>
+        <option>Doctor</option>
+        <option>Artist</option>
+        <option>Unemployed</option>
+      </select>
+      <br />
+      <button id="startBtn">Start Life</button>
+    </div>
+    <div id="dashboard">
+      <div id="turnIndicator"></div>
+      <div class="player-section" id="player1Section">
+        <div class="player-title" id="player1Name">Player 1</div>
+        <div class="age">Age: <span id="player1Age">18</span></div>
+        <div class="stat">
+          <label>Health</label>
+          <div class="progress-bar"><div id="player1Health" class="progress-fill"></div></div>
+        </div>
+        <div class="stat">
+          <label>Happiness</label>
+          <div class="progress-bar"><div id="player1Happiness" class="progress-fill"></div></div>
+        </div>
+        <div class="stat">
+          <label>Knowledge</label>
+          <div class="progress-bar"><div id="player1Knowledge" class="progress-fill"></div></div>
+        </div>
+        <div class="stat">
+          <label>Money</label>
+          <div class="progress-bar"><div id="player1Money" class="progress-fill"></div></div>
+        </div>
+      </div>
+      <div class="player-section" id="player2Section">
+        <div class="player-title" id="player2Name">Player 2</div>
+        <div class="age">Age: <span id="player2Age">18</span></div>
+        <div class="stat">
+          <label>Health</label>
+          <div class="progress-bar"><div id="player2Health" class="progress-fill"></div></div>
+        </div>
+        <div class="stat">
+          <label>Happiness</label>
+          <div class="progress-bar"><div id="player2Happiness" class="progress-fill"></div></div>
+        </div>
+        <div class="stat">
+          <label>Knowledge</label>
+          <div class="progress-bar"><div id="player2Knowledge" class="progress-fill"></div></div>
+        </div>
+        <div class="stat">
+          <label>Money</label>
+          <div class="progress-bar"><div id="player2Money" class="progress-fill"></div></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button data-action="study">Study</button>
+        <button data-action="exercise">Exercise</button>
+        <button data-action="work">Work</button>
+        <button data-action="relax">Relax</button>
+        <button data-action="chat">Chat</button>
+        <button data-action="party">Party</button>
+        <button data-action="sleep">Sleep</button>
+        <button data-action="help">Help Friend</button>
+      </div>
+      <p id="eventMsg"></p>
+      <p id="milestoneMsg"></p>
+      <p id="relationshipStatus"></p>
+    </div>
+  </div>
+
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const profileSetup = document.getElementById('profile-setup');
+  const dashboard = document.getElementById('dashboard');
+  const turnIndicator = document.getElementById('turnIndicator');
+  const eventMsg = document.getElementById('eventMsg');
+  const milestoneMsg = document.getElementById('milestoneMsg');
+  const relationshipStatus = document.getElementById('relationshipStatus');
+
+  const players = [
+    {
+      name: '',
+      age: 18,
+      health: 100,
+      happiness: 100,
+      knowledge: 0,
+      money: 50,
+      section: document.getElementById('player1Section'),
+      elements: {
+        name: document.getElementById('player1Name'),
+        age: document.getElementById('player1Age'),
+        health: document.getElementById('player1Health'),
+        happiness: document.getElementById('player1Happiness'),
+        knowledge: document.getElementById('player1Knowledge'),
+        money: document.getElementById('player1Money'),
+      }
+    },
+    {
+      name: '',
+      age: 18,
+      health: 100,
+      happiness: 100,
+      knowledge: 0,
+      money: 50,
+      section: document.getElementById('player2Section'),
+      elements: {
+        name: document.getElementById('player2Name'),
+        age: document.getElementById('player2Age'),
+        health: document.getElementById('player2Health'),
+        happiness: document.getElementById('player2Happiness'),
+        knowledge: document.getElementById('player2Knowledge'),
+        money: document.getElementById('player2Money'),
+      }
+    }
+  ];
+
+  let currentPlayer = 0;
+  let turnsPassed = 0;
+  let gameStarted = false;
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function updateUI() {
+    players.forEach((p, i) => {
+      p.elements.name.textContent = p.name;
+      p.elements.age.textContent = p.age;
+      p.elements.health.style.width = p.health + '%';
+      p.elements.happiness.style.width = p.happiness + '%';
+      p.elements.knowledge.style.width = p.knowledge + '%';
+      p.elements.money.style.width = Math.min(p.money, 100) + '%';
+      p.section.classList.toggle('active', i === currentPlayer);
+    });
+
+    turnIndicator.textContent = `It's ${players[currentPlayer].name}'s turn`;
+    updateRelationship();
+    checkMilestones();
+  }
+
+  function updateRelationship() {
+    const relation = Math.floor((players[0].happiness + players[1].happiness) / 2);
+    let text = '';
+    if(relation > 80) text = 'Your friendship is amazing!';
+    else if(relation > 60) text = 'You get along pretty well.';
+    else if(relation > 40) text = 'Things are okay between you.';
+    else text = 'Tension in your friendship...';
+    relationshipStatus.textContent = text;
+  }
+
+  function checkMilestones() {
+    players.forEach(p => {
+      if(p.age === 20) milestoneMsg.textContent = `${p.name} just turned 20! 🎉`;
+      else if(p.age === 30) milestoneMsg.textContent = `${p.name} just turned 30! 🎂`;
+      else if(p.age === 40) milestoneMsg.textContent = `${p.name} just turned 40! 🎈`;
+    });
+  }
+
+  function nextTurn() {
+    turnsPassed++;
+    if(turnsPassed % 8 === 0){
+      players.forEach(p => p.age++);
+    }
+    currentPlayer = (currentPlayer + 1) % players.length;
+    updateUI();
+  }
+
+  function performAction(action) {
+    const player = players[currentPlayer];
+    eventMsg.textContent = '';
+    switch(action){
+      case 'study':
+        player.knowledge = clamp(player.knowledge + 15, 0, 100);
+        player.happiness = clamp(player.happiness - 10, 0, 100);
+        eventMsg.textContent = `${player.name} studied hard! 📘`;
+        break;
+      case 'exercise':
+        player.health = clamp(player.health + 20, 0, 100);
+        player.happiness = clamp(player.happiness + 10, 0, 100);
+        player.money = clamp(player.money - 5, 0, 100);
+        eventMsg.textContent = `${player.name} exercised! 🏃`;
+        break;
+      case 'work':
+        player.money = clamp(player.money + 25, 0, 100);
+        player.health = clamp(player.health - 15, 0, 100);
+        player.happiness = clamp(player.happiness - 10, 0, 100);
+        eventMsg.textContent = `${player.name} worked hard! 💼`;
+        break;
+      case 'relax':
+        player.health = clamp(player.health - 5, 0, 100);
+        player.money = clamp(player.money - 10, 0, 100);
+        player.happiness = clamp(player.happiness + 15, 0, 100);
+        eventMsg.textContent = `${player.name} relaxed. 🍿`;
+        break;
+      case 'chat':
+        let other = players[(currentPlayer + 1) % 2];
+        player.happiness = clamp(player.happiness + 15, 0, 100);
+        other.happiness = clamp(other.happiness + 15, 0, 100);
+        eventMsg.textContent = `${player.name} chatted with ${other.name}! 💬`;
+        break;
+      case 'party':
+        player.happiness = clamp(player.happiness + 30, 0, 100);
+        player.health = clamp(player.health - 20, 0, 100);
+        player.money = clamp(player.money - 15, 0, 100);
+        eventMsg.textContent = `${player.name} partied hard! 🎉`;
+        break;
+      case 'sleep':
+        player.health = clamp(player.health + 25, 0, 100);
+        player.happiness = clamp(player.happiness + 10, 0, 100);
+        eventMsg.textContent = `${player.name} had a good sleep. 😴`;
+        break;
+      case 'help':
+        let friend = players[(currentPlayer + 1) % 2];
+        friend.happiness = clamp(friend.happiness + 20, 0, 100);
+        player.happiness = clamp(player.happiness + 10, 0, 100);
+        eventMsg.textContent = `${player.name} helped ${friend.name}! 🤝`;
+        break;
+    }
+    updateUI();
+    nextTurn();
+  }
+
+  startBtn.addEventListener('click', () => {
+    const name1 = document.getElementById('nameInput1').value.trim() || 'Player 1';
+    const name2 = document.getElementById('nameInput2').value.trim() || 'Player 2';
+    const school1 = document.getElementById('schoolInput1').value;
+    const school2 = document.getElementById('schoolInput2').value;
+    const job1 = document.getElementById('jobInput1').value;
+    const job2 = document.getElementById('jobInput2').value;
+
+    players[0].name = name1 + ` (${school1}, ${job1})`;
+    players[1].name = name2 + ` (${school2}, ${job2})`;
+
+    profileSetup.style.display = 'none';
+    dashboard.style.display = 'block';
+
+    gameStarted = true;
+    updateUI();
+  });
+
+  document.querySelectorAll('.actions button').forEach(button => {
+    button.addEventListener('click', e => {
+      if (!gameStarted) return;
+      const action = e.target.getAttribute('data-action');
+      performAction(action);
+    });
+  });
+</script>
+</body>
+</html>
+
