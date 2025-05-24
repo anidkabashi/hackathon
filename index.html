@@ -111,16 +111,21 @@
     height: 16px;
     overflow: hidden;
   }
-  .progress-fill {
-    height: 100%;
-    width: 0;
-    background: #00bfa6;
-    transition: width 0.5s ease-in-out;
-  }
+  .health-fill, .happiness-fill, .knowledge-fill, .money-fill,
+.energy-fill, .social-fill, .stress-fill {
+  height: 100%;
+  width: 0;
+  transition: width 0.5s ease-in-out;
+}
+
   /* Different colors for new stats */
-  .energy-fill { background: #ffb74d; }
-  .social-fill { background: #4dd0e1; }
-  .stress-fill { background: #e57373; }
+  .health-fill { background: red; }
+    .happiness-fill { background: #f06292; } 
+.knowledge-fill { background: purple; }
+.money-fill { background: lightgreen; } 
+.energy-fill { background: #ffb74d; }
+.social-fill { background: #4dd0e1; }
+.stress-fill { background: #e57373; }
   .actions {
     margin-top: 20px;
     text-align: center;
@@ -239,36 +244,45 @@
           <div class="player-title" id="player1NameDisplay">Player 1</div>
           <div class="age">Age: <span id="player1Age">18</span></div>
           <div class="stat">
+
             <label>Health</label>
-            <div class="progress-bar"><div id="player1Health" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player1Health" class="health-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Happiness</label>
-            <div class="progress-bar"><div id="player1Happiness" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player1Happiness" class="happiness-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Knowledge</label>
-            <div class="progress-bar"><div id="player1Knowledge" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player1Knowledge" class="knowledge-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Money</label>
-            <div class="progress-bar"><div id="player1Money" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player1Money" class="money-fill"></div></div>
           </div>
-          <!-- New stats -->
+          
           <div class="stat">
+
             <label>Energy</label>
-            <div class="progress-bar"><div id="player1Energy" class="progress-fill energy-fill"></div></div>
+            <div class="progress-bar"><div id="player1Energy" class="energy-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Social</label>
-            <div class="progress-bar"><div id="player1Social" class="progress-fill social-fill"></div></div>
+            <div class="progress-bar"><div id="player1Social" class="social-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Stress</label>
-            <div class="progress-bar"><div id="player1Stress" class="progress-fill stress-fill"></div></div>
+            <div class="progress-bar"><div id="player1Stress" class="stress-fill"></div></div>
           </div>
         </div>
       </div>
+
+
       <div class="player-section" id="player2Section">
         <div class="player-avatar" id="player2Avatar">👤</div>
         <div class="player-info">
@@ -276,32 +290,37 @@
           <div class="age">Age: <span id="player2Age">18</span></div>
           <div class="stat">
             <label>Health</label>
-            <div class="progress-bar"><div id="player2Health" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player2Health" class="health-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Happiness</label>
-            <div class="progress-bar"><div id="player2Happiness" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player2Happiness" class="happiness-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Knowledge</label>
-            <div class="progress-bar"><div id="player2Knowledge" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player2Knowledge" class="knowledge-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Money</label>
-            <div class="progress-bar"><div id="player2Money" class="progress-fill"></div></div>
+            <div class="progress-bar"><div id="player2Money" class="money-fill"></div></div>
           </div>
-          <!-- New stats -->
-          <div class="stat">
+         <div class="stat">
+
             <label>Energy</label>
-            <div class="progress-bar"><div id="player2Energy" class="progress-fill energy-fill"></div></div>
+            <div class="progress-bar"><div id="player2Energy" class="energy-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Social</label>
-            <div class="progress-bar"><div id="player2Social" class="progress-fill social-fill"></div></div>
+            <div class="progress-bar"><div id="player2Social" class="social-fill"></div></div>
           </div>
           <div class="stat">
+
             <label>Stress</label>
-            <div class="progress-bar"><div id="player2Stress" class="progress-fill stress-fill"></div></div>
+            <div class="progress-bar"><div id="player2Stress" class="stress-fill"></div></div>
           </div>
         </div>
       </div>
@@ -312,7 +331,7 @@
         <button id="exerciseBtn">Exercise</button>
         <button id="chatBtn">Chat</button>
         <button id="helpBtn">Help</button>
-        <button id="nextTurnBtn">Next Turn</button>
+        <button id="nextTurnBtn">RandomEvent</button>
         <button id="sleepBtn">Sleep</button>     
         <button id="partyBtn">Party</button>
       </div>
@@ -333,14 +352,15 @@
       school: "Public",
       job: "Gamer",
       age: 18,
-      health: 80,
-      happiness: 50,
-      knowledge: 20,
-      money: 20,
-      energy: 70,
-      social: 30,
-      stress: 20,
-      relationships: [0], // relationship levels with other players; initially 0
+     knowledge: Math.floor(Math.random() * 51) + 50,      // 50 - 100
+    health: Math.floor(Math.random() * 51) + 50,
+    happiness: Math.floor(Math.random() * 51) + 50,     
+    energy: Math.floor(Math.random() * 51) + 50,
+    social: Math.floor(Math.random() * 51) + 50,
+     intelligence: Math.floor(Math.random() * 51) + 50,
+      money: Math.floor(Math.random() * 51) + 50,          // 50 - 100
+     stress: Math.floor(Math.random() * 51) + 50,
+      relationships: [0], 
       avatar: "👤"
     },
     {
@@ -529,7 +549,7 @@
   function chat() {
     let p = players[currentPlayerIndex];
     let otherIndex = currentPlayerIndex === 0 ? 1 : 0;
-    if(p.energy < 10) {
+    if(p.energy < 5) {
       alert("Not enough energy to chat.");
       return;
     }
@@ -537,7 +557,7 @@
     let multiplier = friendshipMultiplier(currentPlayerIndex, otherIndex);
     let happinessGain = Math.floor(10 * multiplier);
     p.happiness += happinessGain;
-    p.energy -= 10;
+    p.energy -= 5;
     p.social += 10;
     // Increase relationship a bit
     p.relationships[otherIndex] = clamp(p.relationships[otherIndex] + 5, 0, 100);
@@ -551,7 +571,7 @@
   function help() {
     let p = players[currentPlayerIndex];
     let otherIndex = currentPlayerIndex === 0 ? 1 : 0;
-    if(p.energy < 15) {
+    if(p.energy < 10) {
       alert("Not enough energy to help.");
       return;
     }
@@ -559,7 +579,7 @@
     let multiplier = friendshipMultiplier(currentPlayerIndex, otherIndex);
     let happinessGain = Math.floor(15 * multiplier);
     p.happiness += happinessGain;
-    p.energy -= 15;
+    p.energy -= 10;
     p.social += 15;
     // Increase relationship more strongly
     p.relationships[otherIndex] = clamp(p.relationships[otherIndex] + 10, 0, 100);
